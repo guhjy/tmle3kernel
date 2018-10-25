@@ -1,0 +1,30 @@
+Package: tmle3kernel
+Title: TMLE for Non-pathwise-differentiable Parameters Using Kernel Methods
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Jonathan", "Levy", email = "jlstilesmusic@gmail.com", role = c("aut", "cre")),
+    person("Jeremy", "Coyle", email = "jeremyrcoyle@gmail.com",
+           role = "aut",
+           comment = c(ORCID = "0000-0002-9874-6649"))
+  )
+Description: See https://link.springer.com/chapter/10.1007/978-3-319-65304-4_25
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 3.0.0)
+Imports:
+    sl3,
+    tmle3,
+    R6,
+    uuid
+Suggests:
+    testthat
+Remotes:
+    github::tlverse/sl3,
+    github::tlverse/tmle3,
+    github::tlverse/hal9001,
+    github::tlverse/origami,
+VignetteBuilder:
+    knitr,
+    R.rsp
+RoxygenNote: 6.1.0
