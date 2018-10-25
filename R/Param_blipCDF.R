@@ -105,12 +105,12 @@ Param_blipCDF <- R6Class(
         w = with(self$kernel, kern_cdf((B - x0)/self$bandwidth, R=R, veck=veck))
         return(w)
       } ,FUN.VALUE=rep(1,nn))
-      psi <- apply(int, 2, mean)
+      psi <- 1-apply(int, 2, mean)
       
       HA <- self$clever_covariates(tmle_task)$Y
       Y <- tmle_task$get_tmle_node("Y")
       # IC <- vapply(1:length(self$cdf_points),FUN = function(x) {HA[,x]*(Y-EYA)+int[,x]-psi[x]}, FUN.VALUE = rep(1,nn))
-      IC <- HA*as.vector(Y-EYA)+int-rep(psi,each=nn)
+      IC <- -1*HA*as.vector(Y-EYA)+int-rep(psi,each=nn)
       
       result <- list(psi = psi, IC = IC)
       return(result)
