@@ -80,27 +80,22 @@ likelihood <- likelihood_def$train(tmle_task)
 likelihood$get_likelihoods(tmle_task)
 
 # generate targeted likelihood
-updater <- tmle3_Update$new(maxit=1e5, one_dimensional = TRUE, constrain_step = FALSE, delta_epsilon = 1e-4, verbose = FALSE)
+updater <- tmle3_Update$new(maxit=1e5, one_dimensional = TRUE, constrain_step = FALSE, delta_epsilon = 1e-2, verbose = TRUE)
 targeted_likelihood <- Targeted_Likelihood$new(likelihood, updater)
 
 # define parameter
 intervention_treatment <- define_lf(LF_static, "A", value = 1)
 intervention_control <- define_lf(LF_static, "A", value = 0)
 bCDF <- define_param(Param_blipCDF, targeted_likelihood, intervention_treatment, intervention_control, kernel, cdf_points, bw)
-bCDF$name
-# debugonce(bCDF$estimates)
-bCDF$estimates(tmle_task)
 
 # fit tmle update
 tmle_fit <- fit_tmle3(tmle_task, targeted_likelihood, list(bCDF), updater)
-
-# extract results
-# debugonce(summary_from_estimates)
 estimates <- tmle_fit$estimates
 
+# extract results
 cdf_summary <- summary_from_estimates(tmle_task, estimates, simultaneous_ci = TRUE)
 cdf_summary$blip <- cdf_points
 
 library(ggplot2)
-ggplot(cdf_summary, aes(x=blip, y= tmle_est, ymin=lower_transformed,ymax=upper_transformed))+
+ggplot(cdf_summary, aes(x=blip, y= psi_transformed, ymin=lower_transformed,ymax=upper_transformed))+
   geom_line()+theme_bw()+ylab("P(B<t)")+xlab("t")+geom_ribbon(alpha=0.5)
