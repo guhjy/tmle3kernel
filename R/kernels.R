@@ -1,13 +1,9 @@
 
 #' Generate a Polynomial Kernel
-#' @description for use to estimate the kernel smoothed blip_cdf tmle
 #' @param degree the degree of the polynomial of the kernel. Note: (degree - 2) is the order
 #' of the kernel, meaning first non-zero moment is x^(degree - 2).
 #' @param R a positive number giving the support, (-R,R) of the kernel which is symmetric
 #' and centered at 0.
-#' @return  a list with the following elements: veck, which are the coefficients of the even
-#' powers of the polynomial kernel, R is the same as what was input, kern and kern_cdf are
-#' functions.
 #' @export
 make_kernel = function(degree, R){
   if (is.null(degree)) {

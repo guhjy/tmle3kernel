@@ -7,9 +7,11 @@
 make_kernel(degree, R)
 }
 \arguments{
-\item{degree}{the degree of the polynomial for the kernel}
+\item{degree}{the degree of the polynomial of the kernel. Note: (degree - 2) is the order
+of the kernel, meaning first non-zero moment is x^(degree - 2).}
 
-\item{R}{the domain of the kernel}
+\item{R}{a positive number giving the support, (-R,R) of the kernel which is symmetric
+and centered at 0.}
 }
 \description{
 Generate a Polynomial Kernel
