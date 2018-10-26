@@ -1,7 +1,8 @@
 
 #' Generate a Polynomial Kernel
-#' @param degree the degree of the polynomial of the kernel. Note: (degree - 2) is the order
-#' of the kernel, meaning first non-zero moment is x^(degree - 2).
+#' @param degree the degree of the polynomial of the kernel. Must be 4 or greater or NULL for
+#' the uniform kernel. Note: (degree - 2) is the order of the kernel, meaning first non-zero
+#' moment is x^(degree - 2).
 #' @param R a positive number giving the support, (-R,R) of the kernel which is symmetric
 #' and centered at 0.
 #' @export
