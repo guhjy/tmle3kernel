@@ -1,11 +1,17 @@
 
 #' Generate a Polynomial Kernel
-#' @param degree the degree of the polynomial for the kernel
-#' @param R the domain of the kernel
-#' @export 
+#' @description for use to estimate the kernel smoothed blip_cdf tmle
+#' @param degree the degree of the polynomial of the kernel. Note: (degree - 2) is the order
+#' of the kernel, meaning first non-zero moment is x^(degree - 2).
+#' @param R a positive number giving the support, (-R,R) of the kernel which is symmetric
+#' and centered at 0.
+#' @return  a list with the following elements: veck, which are the coefficients of the even
+#' powers of the polynomial kernel, R is the same as what was input, kern and kern_cdf are
+#' functions.
+#' @export
 make_kernel = function(degree, R){
   if (is.null(degree)) {
-    kern = function(x, R, veck) 1/(2*R)*as.numeric(-R <= x & R >= x) 
+    kern = function(x, R, veck) 1/(2*R)*as.numeric(-R <= x & R >= x)
     kern_cdf = function(x, R, veck) (1/(2*R))*as.numeric(x > -R)*(pmin(x ,R)+R)
     veck = 1
   } else {
@@ -17,10 +23,10 @@ make_kernel = function(degree, R){
       orth_rows = lapply(seq(0,max((2*kk-2),0),2), FUN = function(r) {
         vapply(0:(kk+2), FUN = function(i) 2*R^(2*i+3+r)/(2*i+3+r), FUN.VALUE = 1)
       })
-      orth_rows = do.call(rbind, orth_rows) 
+      orth_rows = do.call(rbind, orth_rows)
       mm = rbind(area_row, zero_row, deriv_row, orth_rows)
     } else mm = rbind(area_row, zero_row, deriv_row)
-    
+
     mm_inv = solve(mm)
     veck = mm_inv %*% c(1, rep(0,kk+2))
     kern = function(x, R, veck) {
@@ -28,7 +34,7 @@ make_kernel = function(degree, R){
       w = Reduce("+", ll)*(x > -R & x < R)
       return(w)
     }
-    
+
     kern_cdf = function(x, R, veck) {
       u = pmin(x, R)
       ll = lapply(1:length(veck), FUN = function(c) veck[c]*(u^(2*c-1) + R^(2*c-1))/(2*c-1))
@@ -36,6 +42,6 @@ make_kernel = function(degree, R){
       return(w)
     }
   }
-  
+
   return(list(veck = veck, R = R,  kern = kern, kern_cdf = kern_cdf))
 }
